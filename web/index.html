@@ -11,26 +11,26 @@
             const format = document.querySelector('input[name="format"]:checked');
 
             if (services.length === 0) {
-                alert("Выберите хотя бы один сервис.");
+                alert("Select at least one service.");
                 event.preventDefault();
                 return false;
             }
 
             if (dnsServers.length === 0) {
-                alert("Выберите хотя бы один DNS сервер.");
+                alert("Select at least one DNS server.");
                 event.preventDefault();
                 return false;
             }
 
             if (!format) {
-                alert("Выберите формат сохранения.");
+                alert("Select a save format.");
                 event.preventDefault();
                 return false;
             }
 
             if ((format.value === 'unix' || format.value === 'win' || format.value === 'keenetic') &&
                 !document.getElementById('gateway').value) {
-                alert("Укажите IP шлюза.");
+                alert("Specify the gateway IP.");
                 event.preventDefault();
                 return false;
             }
@@ -90,8 +90,8 @@ run =
                 document.getElementById('progress').innerText = `Конфигурация создана и скрипт запущен. Результат: ${data}`;
             })
             .catch(error => {
-                console.error('Ошибка при отправке конфигурации:', error);
-                document.getElementById('progress').innerText = 'Ошибка при выполнении.';
+                console.error('Error sending configuration:', error);
+                document.getElementById('progress').innerText = 'Error during execution.';
             });
         }
 
@@ -217,12 +217,12 @@ run =
 
         <div id="gatewayField" style="display:none;">
             <label><strong>Укажите IP шлюза или имя интерфейса:</strong></label><br>
-            <input type="text" id="gateway" name="gateway" placeholder="IP или имя шлюза"><br><br>
+            <input type="text" id="gateway" name="gateway" placeholder="IP or gateway name"><br><br>
         </div>
 
         <div id="commentaryField" style="display:none;">
             <label><strong>Укажите комментарий для списка:</strong></label><br>
-            <input type="text" id="commentary" name="commentary" placeholder="Комментарий для списка"><br><br>
+            <input type="text" id="commentary" name="commentary" placeholder="Comment for list"><br><br>
         </div>
 
         <button type="submit">Создать конфигурацию</button>

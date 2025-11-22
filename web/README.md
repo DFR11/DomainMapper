@@ -1,4 +1,4 @@
-# Попытка перенести DomainMapper на WEB платформу для размещения желающими на собсвтенном хостинге.
+# An attempt to transfer DomainMapper to a WEB platform for placement by those wishing to use their own hosting.
 
 Не уверен, что закончу начатое.
 

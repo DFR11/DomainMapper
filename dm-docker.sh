@@ -1,50 +1,50 @@
 #!/bin/bash
 
-# Функция для проверки наличия Docker
+# Function to check for Docker presence
 check_docker() {
     if command -v docker >/dev/null 2>&1; then
-        echo "Docker уже установлен. Версия: $(docker --version)"
-        return 0  # Docker установлен
+        echo "Docker is already installed. Version: $(docker --version)"
+        return 0  # Docker installed
     else
-        echo "Docker не найден. Устанавливаем Docker..."
-        return 1  # Docker не установлен
+        echo "Docker not found. Installing Docker..."
+        return 1  # Docker is not installed
     fi
 }
 
-# Проверяем и устанавливаем Docker, если его нет
+# Check and install Docker if it is not there
 if ! check_docker; then
-    echo "Обновляем список пакетов и устанавливаем необходимые компоненты..."
+    echo "We update the list of packages and install the necessary components..."
     apt update && apt install -y git curl
 
     curl -fsSL https://get.docker.com -o get-docker.sh
     sh ./get-docker.sh
-    rm get-docker.sh  # Удаляем установочный скрипт после установки
+    rm get-docker.sh  # Delete the installation script after installation
 fi
 
-# Клонируем репозиторий, если его нет
+# Clone the repository if it doesn't exist
 if [ ! -d "./DomainMapper" ]; then
-    echo "Клонируем репозиторий DomainMapper..."
+    echo "Clone the DomainMapper repository..."
     git clone https://github.com/Ground-Zerro/DomainMapper.git
 else
-    echo "Репозиторий DomainMapper уже клонирован."
+    echo "The DomainMapper repository has already been cloned."
 fi
 
-# Проверяем наличие Docker образа
+# Checking the presence of a Docker image
 if ! docker image inspect domainmapper >/dev/null 2>&1; then
-    echo "Docker образ не найден. Собираем новый образ..."
+    echo "Docker image not found. Putting together a new look..."
 
-    echo "Устанавливаем только необходимые для работы компоненты..."
+    echo "We install only the components necessary for operation..."
     apt update && apt install -y software-properties-common wget build-essential libssl-dev zlib1g-dev \
         libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
         liblzma-dev tzdata && \
         rm -rf /var/lib/apt/lists/*
 
-    # Создаём Dockerfile с исправлениями
-    echo "Создаём Dockerfile..."
+    # Creating a Dockerfile with fixes
+    echo "Creating a Dockerfile..."
     cat > Dockerfile <<EOL
 FROM ubuntu:jammy
 
-# Устанавливаем необходимые пакеты для сборки Python
+# Installing the necessary packages to build Python
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 RUN apt-get update && \
@@ -54,7 +54,7 @@ RUN apt-get update && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
     rm -rf /var/lib/apt/lists/*
 
-# Скачиваем и устанавливаем Python 3.12
+# Download and install Python 3.12
 RUN wget https://www.python.org/ftp/python/3.12.0/Python-3.12.0.tgz && \
     tar -xvf Python-3.12.0.tgz && \
     cd Python-3.12.0 && \
@@ -64,13 +64,13 @@ RUN wget https://www.python.org/ftp/python/3.12.0/Python-3.12.0.tgz && \
     cd .. && \
     rm -rf Python-3.12.0 Python-3.12.0.tgz
 
-# Устанавливаем pip для Python 3.12
+# Install pip for Python 3.12
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
 
 WORKDIR /app
 ADD ./DomainMapper /app
 
-# Устанавливаем зависимости проекта, если они указаны
+# Install project dependencies, if specified
 RUN if [ -f "requirements.txt" ]; then \
         python3.12 -m pip install --upgrade pip && \
         python3.12 -m pip install -r requirements.txt; \
@@ -79,38 +79,38 @@ RUN if [ -f "requirements.txt" ]; then \
 CMD ["python3.12", "main.py"]
 EOL
 
-    # Создаём файл domain-ip-resolve.txt, если его нет
+    # Create a file domain-ip-resolve.txt if it does not exist
     if [ ! -f "./domain-ip-resolve.txt" ]; then
-        echo "Создаём файл domain-ip-resolve.txt..."
+        echo "Create a phone domain-ip-reolve.txt..."
         touch domain-ip-resolve.txt
-        echo "Файл domain-ip-resolve.txt создан."
+        echo "The domain-ip-resolve.txt file has been created."
     else
-        echo "Файл domain-ip-resolve.txt уже существует."
+        echo "The file domain-ip-resolve.txt already exists."
     fi
 
-    # Собираем Docker образ
-    echo "Собираем Docker образ..."
+    # Building a Docker image
+    echo "Building a Docker image..."
     docker build -t domainmapper .
 
-    # Очищаем кеш Docker после сборки
-    echo "Очищаем build cache Docker..."
+    # Clearing the Docker cache after building
+    echo "Clearing build cache Docker..."
     docker builder prune -f
 else
-    echo "Docker образ domainmapper уже существует."
+    echo "The domainmapper Docker image already exists."
 fi
 
-# Проверяем наличие контейнера и запускаем main.py из существующего контейнера
+# Check for the presence of a container and run main.py from the existing container
 if docker ps -a | grep -q domainmapper_container; then
-    echo "Контейнер уже существует. Запускаем main.py..."
+    echo "The container already exists. Run main.py..."
     docker start -i domainmapper_container
 else
-    echo "Создаем и запускаем новый контейнер..."
+    echo "Create and launch a new container..."
     docker run --name domainmapper_container -v "$(pwd)/domain-ip-resolve.txt:/app/domain-ip-resolve.txt" -it domainmapper
 fi
 
-# Сообщаем пользователю о местонахождении файла
-echo "Контейнер завершил работу. Файл domain-ip-resolve.txt находится в $(pwd)/domain-ip-resolve.txt"
+# We inform the user about the location of the file
+echo "The container has completed its operation. The file domain-ip-resolve.txt is located in $(pwd)/domain-ip-resolve.txt"
 
-# Удаляем скрипт после выполнения
-echo "Скрипт завершен."
+# Delete the script after execution
+echo "The script is complete."
 rm -- "$0"

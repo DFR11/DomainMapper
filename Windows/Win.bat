@@ -7,7 +7,7 @@ REM Проверка Python 3
 python --version 2>NUL | findstr /I "Python 3" >NUL
 if ERRORLEVEL 1 (
     echo Python 3 не установлен.
-    choice /C YN /M "Установить?"
+    choice /C YN /M "Install?"
     if ERRORLEVEL 2 (
         echo Без Python 3 ничего не получится...
         pause
