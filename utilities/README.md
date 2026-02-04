@@ -1,18 +1,18 @@
 # Helper utilities:
-- [subdomain - поиск субдоменов](#subdomain)
-- [verified - проверка активности доменов](#verified)
-- [convert - конвертер маршрутов](#convert)
+- [subdomain - search for subdomains](#subdomain)
+- [verified - checking domain activity](#verified)
+- [convert - route converter](#convert)
 
 ## subdomain
 
 Скрипт представляет собой парсер, который собирает субдомены (A-записи) указанного пользователем домена используя веб-сайт [rapiddns.io](https://rapiddns.io/subdomain/).
-Результаты сохраняются в файл.
+The results are saved to a file.
 
 ### Functions
 
-- Загружает страницу по указанному URL и извлекает субдомены из таблиц, где тип записи равен "A".
-- Пытается повторить запрос до 3х раз в случае ошибки или отсутствия данных.
-- Останавливается, если данные на последних трех страницах одинаковы или если три страницы подряд пустые.
+- Loads the page at the specified URL and retrieves subdomains from tables where the record type is "A".
+- Tries to repeat the request up to 3 times in case of an error or missing data.
+- Stops if the data on the last three pages is the same or if three pages in a row are empty.
 
 ### Usage
 
@@ -22,29 +22,29 @@
    pip install -r requirements.txt
    ```
 
-2. Запустите скрипт:
+2. Run the script:
 
    ```bash
    python subdomain.py
    ```
 
-3. Введите URL домена, поддомены которого вы хотите спарсить, например:
+3. Enter the URL of the domain whose subdomains you want to parse, for example:
 
    ```
    example.com
    ```
 
-4. Скрипт начнет парсинг страниц и сохранит найденные субдомены в файл `result.txt`.
+4. The script will start parsing pages and save the found subdomains to the `result.txt` file.
 
 ## verified
 
-Скрипт предназначен для проверки доменов на их делегированность.
+The script is designed to check domains for their delegation.
 
 ### Functions
 
-- Проверяет домены используя DNS-серверы: Google Public DNS, Cloudflare DNS и Yandex. Пул потоков ограничен 40 рабочими потоками.
-- Возвращает статус домена: делегирован, припаркован/неактивен или ошибку.
-- Если статус домена не был подтвержден как делегированный проводит его контрольную проверку.
+- Checks domains using DNS servers: Google Public DNS, Cloudflare DNS and Yandex. The thread pool is limited to 40 worker threads.
+- Returns the domain status: delegated, parked/inactive, or error.
+- If the domain's status has not been confirmed as delegated, it carries out a control check.
 
 ### Usage
 
@@ -54,33 +54,33 @@
    pip install -r requirements.txt
    ```
 
-2. Поместите файл `result.txt` в корневую директорию проекта. Файл должен содержать список доменов, каждый на новой строке.
+2. Place the `result.txt` file in the project root directory. The file should contain a list of domains, each on a new line.
 
-3. Запустите скрипт:
+3. Run the script:
 
    ```bash
    python verified.py
    ```
 
-4. Скрипт проверит домены и сохранит результат в файл `verified_domains.txt`.
+4. The script will check the domains and save the result to the `verified_domains.txt` file.
 
 ## convert
 
-Скрипт для обработки IP-адресов, их агрегации в подсети и форматирования маршрутов для различных типов сетевых устройств.
+A script for processing IP addresses, aggregating them into subnets and formatting routes for various types of network devices.
 
 ### Functions
 
-- Загрузка списка IP-адресов из файла.
-- Агрегация IP-адресов в подсети с масками `/16`, `/24`, или объединение нескольких подсетей.
-- Исключение IP-адресов Cloudflare из итогового списка (при необходимости).
-- Поддержка различных форматов маршрутизации:
+- Loading a list of IP addresses from a file.
+- Aggregation of IP addresses in a subnet with masks `/16`, `/24`, or combining several subnets.
+- Exclude Cloudflare IP addresses from the final list (if necessary).
+- Supports various routing formats:
   - Windows (`route add`)
   - Unix (`ip route`)
-  - Keenetic (`ip route` с интерфейсом)
+  - Keenetic (`ip route` with interface)
   - Mikrotik (`/ip firewall`)
   - WireGuard
   - OpenVPN
-  - CIDR (с указанием маски)
+  - CIDR (with mask specified)
 
 ### Usage
 
@@ -90,12 +90,12 @@
    pip install -r requirements.txt
    ```
 
-2. Поместите файл c IP-адресами `ip.txt` в корневую директорию проекта. Файл может содержать любой текст и IP-адреса в любом виде - лишнее будет убрано автоматически.
+2. Place the file with IP addresses `ip.txt` in the root directory of the project. The file can contain any text and IP addresses in any form - excess will be removed automatically.
 
-3. Запустите скрипт:
+3. Run the script:
 
    ```bash
    python convert.py
    ```
 
-4. Следуйте подсказкам на экране.
+4. Follow the prompts on the screen.

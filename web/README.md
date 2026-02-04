@@ -1,8 +1,8 @@
 # An attempt to transfer DomainMapper to a WEB platform for placement by those wishing to use their own hosting.
 
-Не уверен, что закончу начатое.
+I'm not sure I'll finish what I started.
 
-Предложения в виде **pull requests** приветствуются.
+Suggestions in the form of **pull requests** are welcome.
 
 
 ```

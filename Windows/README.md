@@ -1,21 +1,21 @@
 ## Domain Mapper
 
 
-Батник для запуска Domain Mapper под windows.
+A batch file for running Domain Mapper under Windows.
 
 
-**Описание:** Поставит Python и зависимости. Для тех кто не может этого сделать самостоятельно.
+**Description:** Will install Python and dependencies. For those who cannot do this on their own.
 
 
-**Использование:**
-- Скачать Win.bat и запустить его.
+**Usage:**
+- Download Win.bat and run it.
 
-**Можете попробовать эти варианты:**
-- Запустить PowerShell и выполнить команду:
+**You can try these options:**
+- Launch PowerShell and run the command:
 ```
 irm https://github.com/Ground-Zerro/DomainMapper/raw/main/Windows/Win.bat -OutFile "$env:TEMP\Win.bat"; cmd /c "$env:TEMP\Win.bat"
 ```
-- Открыть командную строку Windows и выполнить команду:
+- Open Windows Command Prompt and run the command:
 ```
 powershell -Command "irm https://github.com/Ground-Zerro/DomainMapper/raw/main/Windows/Win.bat -OutFile $env:TEMP\Win.bat" && cmd /c "%TEMP%\Win.bat"
 ```
