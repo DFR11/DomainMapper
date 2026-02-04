@@ -157,7 +157,7 @@ def process_single_file(file_path, inside_tar=False):
     ext = os.path.splitext(file_path)[1].lower()
     
     # === 关键修改：增加 js, css, jsx 等支持 ===
-    script_exts = ['.sh', '.cfg', '.conf', '.list', '.txt', '.json', '.xml', '.lua', '.js', '.css', '.jsx', '.ts']
+    script_exts = ['.sh', '.cfg', '.conf', '.list', '.txt', '.json', '.xml', '.lua', '.js', '.css', '.jsx', '.ts', '.bat', '.cmd']
     html_exts = ['.html', '.htm', '.asp', '.php'] # php 也常包含 html
     md_exts = ['.md', '.markdown']
     valid_names = ['config', 'Makefile', 'control', 'postinst', 'prerm']
